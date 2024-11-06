@@ -7,6 +7,7 @@
 int ft_strlen(char *str)
 {
 	int i;
+	i = 0;
 	while (str[i])
 		i++;
 	//printf("\nlen calc : %d \n\n", i);
@@ -20,11 +21,13 @@ int	is_end_of_line(char *c)
 	i = 0;
 	while (c[i] != '\0')
 	{
+		//printf("pipi");
 		if (c[i] == '\n')
 			return (i);
 		else
 			i++;
 	}
+	//printf("caca");
 	return (0);
 }
 
@@ -57,8 +60,10 @@ void	add_to_c(char *c, char* t, int* nbuf )
 			c[i] = t[i];
 			i++;
 		}
+		c[i] = '\n';
+		//c[i+1] = '\0';
 	}
-	printf(" :: %d\n", ft_strlen(t));
+	//printf(" :: %d\n", ft_strlen(t));
 	t += ft_strlen(t);
 	*nbuf = ft_strlen(t);
 }
@@ -76,14 +81,15 @@ char *get_next_line(int fd)
     char* c = (char*)calloc(1000, sizeof(char));
 	if (!c)
 		return (NULL);
-	printf("t : %d", ft_strlen(t));
+	//printf("t : %d", ft_strlen(t));
 	add_to_c(c, t, &nbuf);
-	printf("\ntest-second-iteration : %s || %d\n", c, nbuf);
+	//printf("\ntest-second-iteration : %s || %d\n", c, nbuf);
 	while (!check)
 	{
 		//write(1, "loop1", 5);
 		sr = read(fd, &c[nbuf], BUFFER_SIZE);
-		printf("c : %s\n", c);
+		//printf("c : %s\n", c);
+		//printf("\n%d\n", ft_strlen(c));
 		check = is_end_of_line(c);
 		nbuf += sr;
 	}
@@ -102,6 +108,7 @@ int	main(void)
 	int fd;
 
 	fd = open("test", O_RDONLY);
+	get_next_line(fd);
 	get_next_line(fd);
 	get_next_line(fd);
 	return 0;
