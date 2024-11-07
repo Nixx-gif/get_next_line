@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
-#define BUFFER_SIZE 1
+#define BUFFER_SIZE 4
 
 
 char	*ft_strndup(const char *s, size_t n)
