@@ -1,0 +1,30 @@
+char	*get_next_line(int fd)
+{
+	static char	*t = NULL;
+	int			check;
+	int			nbuf;
+	int			sr;
+	char		*c;
+
+	if (t == NULL)
+		t = malloc(BUFFER_SIZE * sizeof(*t));
+	nbuf = 0;
+	check = 0;
+	c = (char *)malloc(1000 * sizeof(char));
+	if (!c)
+		return (NULL);
+	add_to_c(c, t, &nbuf);
+	while (!check)
+	{
+		sr = read(fd, &c[nbuf], BUFFER_SIZE);
+		if (!sr)
+			break ;
+		check = ft_isnewline(c);
+		nbuf += sr;
+	}
+	c[nbuf] = '\0';
+	add_to_tiroir(c, t);
+	c[is_end_of_line(c)] = '\0';
+	printf("result of get_next_line() : %s\n", c);
+	return (NULL);
+}
