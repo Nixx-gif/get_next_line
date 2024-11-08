@@ -46,25 +46,26 @@ char	*get_next_line(int fd)
 	char		*temp;
 
 	if (t == NULL)
-		t = malloc(51200 * sizeof(*t));
+		t = malloc(BUFFER_SIZE * sizeof(char));
 	nbuf = 0;
 	check = 0;
 	c = (char *)malloc(BUFFER_SIZE * sizeof(char));
 	if (!c)
 		return (NULL);
 	add_to_c(c, t, &nbuf);
+	if (ft_isnewline(t))
+		return t;
 	while (!check)
 	{
 		sr = read(fd, c + nbuf, BUFFER_SIZE);
 		if (!sr)
-			break ;
+			return (NULL);
 		check = ft_isnewline(c + nbuf);
 		temp = ft_strdup(c);
 		if (!temp)
 			return (NULL);
 		free(c);
-                printf("%d\n", nbuf * BUFFER_SIZE);
-		c = (char *)malloc(sizeof(char) * (nbuf * BUFFER_SIZE));
+		c = (char *)malloc(sizeof(char) * (nbuf + 1 + BUFFER_SIZE));
 		if (!c)
 			return (c);
 		c = ft_strcpy(c, temp);
@@ -74,20 +75,24 @@ char	*get_next_line(int fd)
 	c[nbuf] = '\0';
 	add_to_tiroir(c, t);
 	c[is_end_of_line(c)] = '\0';
-	printf("Tirroir: %s\n", t);
-	printf("result of get_next_line() : %s\n", c);
 	return (c);
 }
 
 int	main(void)
 {
 	int fd;
+	char *str;
 
 	fd = open("test", O_RDONLY);
-	get_next_line(fd);
-	get_next_line(fd);
-	get_next_line(fd);
-	get_next_line(fd);
+	str = get_next_line(fd);
+	while (str)
+	{
+		printf("%s\n", str);
+		free(str);
+		str = get_next_line(fd);
+	}
+	free(str);
+	close(fd);
 
 	return (0);
 }
